@@ -3,6 +3,14 @@ compatibility_date = "2024-07-25"
 
 workers_dev = true
 
+[vars]
+WEB_URL = "http://localhost:5173"
+
+[env.production]
+name = "calljourney-server"
+[env.production.vars]
+WEB_URL = "https://calljourney.pages.dev/"
+
 # [vars]
 # MY_VAR = "my-variable"
 
