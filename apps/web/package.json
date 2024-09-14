@@ -17,6 +17,9 @@
     "pre-push": "pnpm run lint && pnpm run format"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.0",
     "@remix-run/cloudflare": "^2.10.3",
     "@remix-run/cloudflare-pages": "^2.10.3",
     "@remix-run/react": "^2.10.3",
