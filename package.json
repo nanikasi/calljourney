@@ -1,5 +1,5 @@
 {
-  "name": "appName",
+  "name": "calljourney",
   "private": true,
   "scripts": {
     "build": "turbo build",

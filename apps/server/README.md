@@ -1,4 +1,4 @@
-# AppName Server
+# CallJourney Server
 
 ```
 npm install
