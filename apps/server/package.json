@@ -1,0 +1,18 @@
+{
+  "name": "server",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts --name app-server",
+    "lint": "biome lint ./src",
+    "format": "biome format ./src",
+    "pre-push": "pnpm run lint && pnpm run format"
+  },
+  "dependencies": {
+    "hono": "^4.5.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240529.0",
+    "wrangler": "^3.57.2",
+    "@biomejs/biome": "^1.8.3"
+  }
+}

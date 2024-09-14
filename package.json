@@ -1,0 +1,19 @@
+{
+  "name": "appName",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "biome lint",
+    "format": "biome format",
+    "pre-push": "biome lint && biome format"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "turbo": "^2.0.11"
+  },
+  "packageManager": "pnpm@8.15.6",
+  "engines": {
+    "node": ">=18"
+  }
+}

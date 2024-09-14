@@ -1,0 +1,33 @@
+name: deploy server
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/server/**"
+
+jobs:
+  deploy:
+    name: deploy server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8  
+
+      - run: pnpm install
+
+      - name: server deploy
+        run: pnpm run deploy
+        working-directory: "apps/server"
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
