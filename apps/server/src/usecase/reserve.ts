@@ -36,6 +36,7 @@ export async function reserve(
   });
   const newReservation = Reservation.new({
     userID: newUser.identity(),
+    phone: new Phone(input.restaurantPhone),
     time: new Date(input.time),
     customerCount: input.customerCount,
   });

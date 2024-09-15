@@ -1,10 +1,12 @@
 import type { Entity } from "../../util/utility-type";
 import { ID } from "../value-object/id";
+import type { Phone } from "../value-object/phone";
 import type { Status } from "../value-object/reservation-status";
 
 export class Reservation implements Entity<ID> {
   private _id: ID;
   private _userID: ID;
+  private _phone: Phone;
   private _time: Date;
   private _customerCount: number;
   private _status: Status;
@@ -12,12 +14,14 @@ export class Reservation implements Entity<ID> {
   constructor({
     id,
     userID,
+    phone,
     time,
     customerCount,
     status,
   }: {
     id: ID;
     userID: ID;
+    phone: Phone;
     time: Date;
     customerCount: number;
     status: Status;
@@ -27,6 +31,9 @@ export class Reservation implements Entity<ID> {
     }
     if (!userID) {
       throw new Error("userID is required");
+    }
+    if (!phone) {
+      throw new Error("Phone is required");
     }
     if (!time) {
       throw new Error("time is required");
@@ -41,6 +48,7 @@ export class Reservation implements Entity<ID> {
 
     this._id = id;
     this._userID = userID;
+    this._phone = phone;
     this._time = time;
     this._customerCount = customerCount;
     this._status = status;
@@ -48,12 +56,14 @@ export class Reservation implements Entity<ID> {
 
   public static new({
     userID,
+    phone,
     time,
     customerCount,
-  }: { userID: ID; time: Date; customerCount: number }) {
+  }: { userID: ID; phone: Phone; time: Date; customerCount: number }) {
     return new Reservation({
       id: ID.generate(),
       userID,
+      phone,
       time,
       customerCount,
       status: "pending",
@@ -70,7 +80,9 @@ export class Reservation implements Entity<ID> {
   get userID(): ID {
     return this._userID;
   }
-
+  get phone(): Phone {
+    return this._phone;
+  }
   get time(): Date {
     return this._time;
   }

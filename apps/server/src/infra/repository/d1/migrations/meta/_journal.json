@@ -15,6 +15,13 @@
       "when": 1726389477602,
       "tag": "0001_lazy_frog_thor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1726417339050,
+      "tag": "0002_foamy_nightmare",
+      "breakpoints": true
     }
   ]
 }
