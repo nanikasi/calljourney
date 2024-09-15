@@ -1,7 +1,7 @@
 {
   "name": "calljourney-server",
   "scripts": {
-    "dev": "wrangler dev src/index.ts",
+    "dev": "pnpm run gen:wrangler/toml && wrangler dev src/index.ts",
     "deploy": "pnpm run gen:wrangler/toml && wrangler deploy --minify src/index.ts --name calljourney-server",
     "lint": "biome lint ./src",
     "format": "biome format ./src",

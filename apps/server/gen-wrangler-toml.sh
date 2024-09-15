@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -e .env ]; then
+  set -a
+  source .env
+  set +a
+fi
+
 cat > wrangler.toml <<EOL
 name = "calljourney-server"
 compatibility_date = "2024-07-25"
