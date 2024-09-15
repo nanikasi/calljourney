@@ -7,9 +7,9 @@ export class MailServiceImpl implements MailService {
   private mailerSend: MailerSend;
   private sentFrom: Sender;
 
-  constructor(apiKey: string, senderEmail: string, senderName: string) {
+  constructor(apiKey: string, senderEmail: string) {
     this.mailerSend = new MailerSend({ apiKey });
-    this.sentFrom = new Sender(senderEmail, senderName);
+    this.sentFrom = new Sender(senderEmail, "CallJourney");
   }
 
   private createEmailParams(

@@ -17,6 +17,8 @@ import reserveSuccessRoute from "./route/reserve.success.post";
 export type Bindings = {
   DB: D1Database;
   WEB_URL: string;
+  MAILER_SEND_API_TOKEN: string;
+  SENDER_MAIL_ADDRESS: string;
 };
 
 export type VariablesType = {
@@ -59,7 +61,13 @@ app
       new D1ReservationRepositoryImpl(c.env.DB),
     );
     diContainer.register("CallService", CallServiceImpl);
-    diContainer.register("MailService", MailServiceImpl);
+    diContainer.register(
+      "MailService",
+      new MailServiceImpl(
+        c.env.MAILER_SEND_API_TOKEN,
+        c.env.SENDER_MAIL_ADDRESS,
+      ),
+    );
     c.set("diContainer", diContainer);
     return next();
   })
