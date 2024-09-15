@@ -17,6 +17,10 @@ import reserveSuccessRoute from "./route/reserve.success.post";
 export type Bindings = {
   DB: D1Database;
   WEB_URL: string;
+  TWILIO_API_URL: string;
+  TWILIO_ACCOUNT_SID: string;
+  TWILIO_AUTH_TOKEN: string;
+  TWILIO_PHONE_NUMBER: string;
   MAILER_SEND_API_TOKEN: string;
   SENDER_MAIL_ADDRESS: string;
 };
@@ -60,7 +64,15 @@ app
       "ReservationRepository",
       new D1ReservationRepositoryImpl(c.env.DB),
     );
-    diContainer.register("CallService", CallServiceImpl);
+    diContainer.register(
+      "CallService",
+      new CallServiceImpl(
+        c.env.TWILIO_API_URL,
+        c.env.TWILIO_ACCOUNT_SID,
+        c.env.TWILIO_AUTH_TOKEN,
+        c.env.TWILIO_PHONE_NUMBER,
+      ),
+    );
     diContainer.register(
       "MailService",
       new MailServiceImpl(

@@ -44,7 +44,7 @@ export async function reserve(
   await repositories.userRepository.save(newUser);
   await repositories.reservationRepository.save(newReservation);
 
-  services.callService.call(newUser, newReservation);
+  await services.callService.call(newUser, newReservation);
 
   return { id: newReservation.identity().value() };
 }
