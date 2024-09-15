@@ -3,5 +3,55 @@ import type { User } from "../../domain/model/user";
 import type { CallService } from "../../service/call-service";
 
 export class CallServiceImpl implements CallService {
-  call(user: User, reservation: Reservation): void {}
+  private _apiUrl: string;
+  private _accountSID: string;
+  private _authToken: string;
+  private _twilioPhoneNumber: string;
+
+  constructor(
+    apiUrl: string,
+    accountSID: string,
+    authToken: string,
+    twilioPhoneNumber: string,
+  ) {
+    this._apiUrl = apiUrl;
+    this._accountSID = accountSID;
+    this._authToken = authToken;
+    this._twilioPhoneNumber = twilioPhoneNumber;
+  }
+
+  async call(user: User, reservation: Reservation): Promise<void> {
+    const url = this._apiUrl;
+    console.log(url);
+
+    const params = new URLSearchParams();
+    params.append("To", "+818083241269");
+    params.append("From", `${this._twilioPhoneNumber}`);
+    params.append(
+      "Parameters",
+      JSON.stringify({
+        name: user.name,
+        phone: user.phone,
+        customerCount: reservation.customerCount,
+        date: "15日",
+        time: "14時30分",
+        reservationID: reservation.identity().value(),
+      }),
+    );
+
+    const options = {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${btoa(`${this._accountSID}:${this._authToken}`)}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: params,
+    };
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+      throw new Error(`Failed to call API. Status: ${response.status}`);
+    }
+  }
 }

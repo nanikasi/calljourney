@@ -14,6 +14,10 @@ workers_dev = true
 
 [vars]
 WEB_URL = "http://localhost:5173"
+TWILIO_API_URL = "${TWILIO_API_URL}"
+TWILIO_ACCOUNT_SID = "${TWILIO_ACCOUNT_SID}"
+TWILIO_AUTH_TOKEN = "${TWILIO_AUTH_TOKEN}"
+TWILIO_PHONE_NUMBER = "${TWILIO_PHONE_NUMBER}"
 
 [env.production]
 name = "calljourney-server"
