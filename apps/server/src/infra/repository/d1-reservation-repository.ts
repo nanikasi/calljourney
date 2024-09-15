@@ -46,7 +46,7 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
     const dbReservation: DBReservation = {
       id: reservation.identity().value(),
       userID: reservation.userID.value(),
-      phone: reservation.phone.full,
+      phone: reservation.phone.local,
       time: reservation.time.toISOString(),
       customerCount: reservation.customerCount,
       status: reservation.status,
@@ -72,7 +72,7 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
     const deleteReservation: DBReservation = {
       id: reservation.identity().value(),
       userID: reservation.userID.value(),
-      phone: reservation.phone.full,
+      phone: reservation.phone.local,
       time: reservation.time.toISOString(),
       customerCount: reservation.customerCount,
       status: reservation.status,

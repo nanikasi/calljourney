@@ -13,7 +13,10 @@ export class Phone {
     this._phoneNumber = number;
   }
 
-  get full(): string {
+  get international(): string {
+    return `+81${this._phoneNumber.slice(1)}`;
+  }
+  get local(): string {
     return this._phoneNumber;
   }
 
