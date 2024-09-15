@@ -22,11 +22,10 @@ export class CallServiceImpl implements CallService {
 
   async call(user: User, reservation: Reservation): Promise<void> {
     const url = this._apiUrl;
-    console.log(url);
 
     const params = new URLSearchParams();
-    params.append("To", "+818083241269");
-    params.append("From", `${this._twilioPhoneNumber}`);
+    params.append("To", reservation.phone.international);
+    params.append("From", this._twilioPhoneNumber);
     params.append(
       "Parameters",
       JSON.stringify({
