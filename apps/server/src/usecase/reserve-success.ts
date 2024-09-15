@@ -33,5 +33,5 @@ export async function reserveSuccess(
   const successReservation = reservation.success();
   repositories.reservationRepository.save(successReservation);
 
-  return await services.mailService.sendSuccess(user, successReservation);
+  return await services.mailService.sendSuccess(user, reservation);
 }
