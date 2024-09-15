@@ -12,6 +12,7 @@ import { CallServiceImpl } from "../service/call-service-impl";
 import { MailServiceImpl } from "../service/mail-service-impl";
 import { DIContainer } from "./di-container";
 import reservePostRoute from "./route/reserve.post";
+import reserveSuccessRoute from "./route/reserve.success.post";
 
 export type Bindings = {
   DB: D1Database;
@@ -20,6 +21,8 @@ export type Bindings = {
   TWILIO_ACCOUNT_SID: string;
   TWILIO_AUTH_TOKEN: string;
   TWILIO_PHONE_NUMBER: string;
+  MAILER_SEND_API_TOKEN: string;
+  SENDER_MAIL_ADDRESS: string;
 };
 
 export type VariablesType = {
@@ -70,11 +73,18 @@ app
         c.env.TWILIO_PHONE_NUMBER,
       ),
     );
-    diContainer.register("MailService", MailServiceImpl);
+    diContainer.register(
+      "MailService",
+      new MailServiceImpl(
+        c.env.MAILER_SEND_API_TOKEN,
+        c.env.SENDER_MAIL_ADDRESS,
+      ),
+    );
     c.set("diContainer", diContainer);
     return next();
   })
   .get("/ui", swaggerUI({ url: "schema" }))
-  .route("/", reservePostRoute);
+  .route("/", reservePostRoute)
+  .route("/", reserveSuccessRoute);
 
 export default app;

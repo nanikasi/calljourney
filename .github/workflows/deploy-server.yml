@@ -36,3 +36,5 @@ jobs:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
           TWILIO_PHONE_NUMBER: ${{ secrets.TWILIO_PHONE_NUMBER }}
+          MAILER_SEND_API_TOKEN: ${{ secrets.MAILER_SEND_API_TOKEN }}
+          SENDER_MAIL_ADDRESS: ${{ secrets.SENDER_MAIL_ADDRESS }}
