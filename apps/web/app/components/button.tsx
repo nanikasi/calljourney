@@ -5,7 +5,7 @@ type Props = {
 export const Button = ({ text }: Props): JSX.Element => {
   return (
     <button
-      type="button"
+      type="submit"
       className="w-full bg-black text-white py-2 rounded-md"
     >
       {text}
