@@ -12,6 +12,7 @@ import { CallServiceImpl } from "../service/call-service-impl";
 import { MailServiceImpl } from "../service/mail-service-impl";
 import { DIContainer } from "./di-container";
 import reservePostRoute from "./route/reserve.post";
+import reserveSuccessRoute from "./route/reserve.success.post";
 
 export type Bindings = {
   DB: D1Database;
@@ -63,6 +64,7 @@ app
     return next();
   })
   .get("/ui", swaggerUI({ url: "schema" }))
-  .route("/", reservePostRoute);
+  .route("/", reservePostRoute)
+  .route("/", reserveSuccessRoute);
 
 export default app;
