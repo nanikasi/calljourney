@@ -1,18 +1,32 @@
 import type { Entity } from "../../util/utility-type";
 import { ID } from "../value-object/id";
+import {
+  type Status,
+  fail,
+  pending,
+  success,
+} from "../value-object/reservation-status";
 
 export class Reservation implements Entity<ID> {
   private _id: ID;
   private _userID: ID;
   private _time: Date;
   private _customerCount: number;
+  private _status: Status;
 
   constructor({
     id,
     userID,
     time,
     customerCount,
-  }: { id: ID; userID: ID; time: Date; customerCount: number }) {
+    status,
+  }: {
+    id: ID;
+    userID: ID;
+    time: Date;
+    customerCount: number;
+    status: Status;
+  }) {
     if (!id) {
       throw new Error("ID is required");
     }
@@ -34,6 +48,7 @@ export class Reservation implements Entity<ID> {
     this._userID = userID;
     this._time = time;
     this._customerCount = customerCount;
+    this._status = status;
   }
 
   public static new({
@@ -41,7 +56,13 @@ export class Reservation implements Entity<ID> {
     time,
     customerCount,
   }: { userID: ID; time: Date; customerCount: number }) {
-    return new Reservation({ id: ID.generate(), userID, time, customerCount });
+    return new Reservation({
+      id: ID.generate(),
+      userID,
+      time,
+      customerCount,
+      status: pending,
+    });
   }
 
   identity(): ID {
@@ -60,5 +81,25 @@ export class Reservation implements Entity<ID> {
   }
   get customerCount(): number {
     return this._customerCount;
+  }
+
+  public success(): Reservation {
+    if (this._status !== pending) {
+      throw new Error("status must be pending");
+    }
+
+    this._status = success;
+
+    return this;
+  }
+
+  public fail(): Reservation {
+    if (this._status !== pending) {
+      throw new Error("status must be pending");
+    }
+
+    this._status = fail;
+
+    return this;
   }
 }
