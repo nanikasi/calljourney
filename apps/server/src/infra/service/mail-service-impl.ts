@@ -1,30 +1,68 @@
-import { EmailParams, MailerSend, Recipient, Sender } from "mailersend";
 import type { Reservation } from "../../domain/model/reservation";
 import type { User } from "../../domain/model/user";
 import type { MailService } from "../../service/mail-service";
 
 export class MailServiceImpl implements MailService {
-  private mailerSend: MailerSend;
-  private sentFrom: Sender;
+  private _apiKey: string;
+  private _sederEmail: string;
 
   constructor(apiKey: string, senderEmail: string) {
-    this.mailerSend = new MailerSend({ apiKey });
-    this.sentFrom = new Sender(senderEmail, "CallJourney");
+    this._apiKey = apiKey;
+    this._sederEmail = senderEmail;
   }
 
-  private createEmailParams(
+  private async send(
     user: User,
     subject: string,
-    textContent: string,
-  ): EmailParams {
-    const recipients = [new Recipient(String(user.email), user.name)];
+    content: string,
+  ): Promise<void> {
+    console.log({
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this._apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: {
+          email: this._sederEmail,
+          name: "CallJourney",
+        },
+        to: [
+          {
+            email: user.email.full,
+            name: user.name,
+          },
+        ],
+        subject: subject,
+        text: content,
+      }),
+    });
 
-    return new EmailParams()
-      .setFrom(this.sentFrom)
-      .setTo(recipients)
-      .setReplyTo(this.sentFrom)
-      .setSubject(subject)
-      .setText(textContent);
+    const response = await fetch("https://api.mailersend.com/v1/email", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this._apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: {
+          email: this._sederEmail,
+          name: "CallJourney",
+        },
+        to: [
+          {
+            email: user.email.full,
+            name: user.name,
+          },
+        ],
+        subject: subject,
+        text: content,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to send email: ${response.status}`);
+    }
   }
 
   async sendSuccess(user: User, reservation: Reservation): Promise<void> {
@@ -42,8 +80,7 @@ export class MailServiceImpl implements MailService {
       CallJourney
     `;
 
-    const emailParams = this.createEmailParams(user, subject, textContent);
-    await this.mailerSend.email.send(emailParams);
+    return await this.send(user, subject, textContent);
   }
 
   async sendFail(user: User, reservation: Reservation): Promise<void> {
@@ -61,7 +98,6 @@ export class MailServiceImpl implements MailService {
       CallJourney
     `;
 
-    const emailParams = this.createEmailParams(user, subject, textContent);
-    await this.mailerSend.email.send(emailParams);
+    return await this.send(user, subject, textContent);
   }
 }
