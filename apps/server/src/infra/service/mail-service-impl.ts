@@ -16,28 +16,6 @@ export class MailServiceImpl implements MailService {
     subject: string,
     content: string,
   ): Promise<void> {
-    console.log({
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this._apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: {
-          email: this._sederEmail,
-          name: "CallJourney",
-        },
-        to: [
-          {
-            email: user.email.full,
-            name: user.name,
-          },
-        ],
-        subject: subject,
-        text: content,
-      }),
-    });
-
     const response = await fetch("https://api.mailersend.com/v1/email", {
       method: "POST",
       headers: {
