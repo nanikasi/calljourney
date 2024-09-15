@@ -2,17 +2,25 @@
   "name": "calljourney-server",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts --name calljourney-server",
+    "deploy": "pnpm run gen:wrangler/toml && wrangler deploy --minify src/index.ts --name calljourney-server",
     "lint": "biome lint ./src",
     "format": "biome format ./src",
-    "pre-push": "pnpm run lint && pnpm run format"
+    "pre-push": "pnpm run lint && pnpm run format",
+    "gen:wrangler/toml": "bash gen-wrangler-toml.sh",
+    "gen:sql": "drizzle-kit generate --dialect=sqlite --schema=./src/infra/repository/d1/schema.server.ts --out=./src/infra/repository/d1/migrations",
+    "migrate:local:dev": "wrangler d1 migrations apply calljourney-dev --local",
+    "migrate:remote:dev": "wrangler d1 migrations apply calljourney-dev --remote",
+    "migrate:local:prd": "wrangler d1 migrations apply calljourney-dev --local",
+    "migrate:remote:prd": "wrangler d1 migrations apply calljourney-dev --remote"
   },
   "dependencies": {
+    "drizzle-orm": "^0.33.0",
     "hono": "^4.5.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@cloudflare/workers-types": "^4.20240529.0",
-    "wrangler": "^3.57.2",
-    "@biomejs/biome": "^1.8.3"
+    "drizzle-kit": "^0.24.2",
+    "wrangler": "^3.57.2"
   }
 }
