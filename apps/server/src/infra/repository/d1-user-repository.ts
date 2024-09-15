@@ -45,7 +45,7 @@ export class D1UserRepositoryImpl implements UserRepository {
       id: user.identity().value(),
       name: user.name,
       email: user.email.full,
-      phone: user.phone.full,
+      phone: user.phone.local,
     };
 
     const existUser = await db
@@ -65,8 +65,8 @@ export class D1UserRepositoryImpl implements UserRepository {
     const deleteUser: DBUser = {
       id: user.identity().value(),
       name: user.name,
-      email: user.phone.full,
-      phone: user.phone.full,
+      email: user.email.full,
+      phone: user.phone.local,
     };
 
     await db.delete(users).where(eq(users.id, deleteUser.id));

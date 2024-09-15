@@ -49,7 +49,7 @@ export class MailServiceImpl implements MailService {
       ${user.name}様
 
       予約が確定しました。
-      店舗電話番号: ${reservation.phone.full}
+      店舗電話番号: ${reservation.phone.local}
       日時: ${reservation.time} ${reservation.time}
       予約人数: ${reservation.customerCount}
 
@@ -69,7 +69,7 @@ export class MailServiceImpl implements MailService {
       予約することができませんでした。
       お手数ですが、日時を変更して再度お電話お願いします。
 
-      店舗電話番号: ${reservation.phone.full}
+      店舗電話番号: ${reservation.phone.local}
       日時: ${reservation.time} ${reservation.time}
       予約人数: ${reservation.customerCount}
       
