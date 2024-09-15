@@ -41,8 +41,8 @@ export async function reserve(
   });
 
   // TODO: Transaction
-  repositories.userRepository.save(newUser);
-  repositories.reservationRepository.save(newReservation);
+  await repositories.userRepository.save(newUser);
+  await repositories.reservationRepository.save(newReservation);
 
   services.callService.call(newUser, newReservation);
 
