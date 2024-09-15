@@ -4,7 +4,7 @@ import type { Bindings, VariablesType } from "../entrypoint";
 
 const schema = createRoute({
   method: "post",
-  path: "/post",
+  path: "/reserve",
   request: {
     query: z.object({
       name: z.string().openapi({
