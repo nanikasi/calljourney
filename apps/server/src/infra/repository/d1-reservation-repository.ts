@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/d1";
 
-import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { eq } from "drizzle-orm";
 import { Reservation } from "../../domain/model/reservation";
 import type { ReservationRepository } from "../../domain/repository/reservation-repository";
@@ -33,7 +33,7 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
       id: new ID(result.id),
       userID: new ID(result.userID),
       phone: new Phone(result.phone),
-      time: new Dayjs(result.time),
+      time: dayjs(result.time),
       customerCount: result.customerCount,
       status: result.status as Status,
     });

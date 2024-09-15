@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { Reservation } from "../domain/model/reservation";
 import { User } from "../domain/model/user";
 import type { ReservationRepository } from "../domain/repository/reservation-repository";
@@ -38,7 +38,7 @@ export async function reserve(
   const newReservation = Reservation.new({
     userID: newUser.identity(),
     phone: new Phone(input.restaurantPhone),
-    time: new Dayjs(input.time),
+    time: dayjs(input.time),
     customerCount: input.customerCount,
   });
 
