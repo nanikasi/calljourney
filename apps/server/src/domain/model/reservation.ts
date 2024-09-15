@@ -1,11 +1,6 @@
 import type { Entity } from "../../util/utility-type";
 import { ID } from "../value-object/id";
-import {
-  type Status,
-  fail,
-  pending,
-  success,
-} from "../value-object/reservation-status";
+import type { Status } from "../value-object/reservation-status";
 
 export class Reservation implements Entity<ID> {
   private _id: ID;
@@ -61,7 +56,7 @@ export class Reservation implements Entity<ID> {
       userID,
       time,
       customerCount,
-      status: pending,
+      status: "pending",
     });
   }
 
@@ -82,23 +77,26 @@ export class Reservation implements Entity<ID> {
   get customerCount(): number {
     return this._customerCount;
   }
+  get status(): string {
+    return this._status;
+  }
 
   public success(): Reservation {
-    if (this._status !== pending) {
+    if (this._status !== "pending") {
       throw new Error("status must be pending");
     }
 
-    this._status = success;
+    this._status = "success";
 
     return this;
   }
 
   public fail(): Reservation {
-    if (this._status !== pending) {
+    if (this._status !== "pending") {
       throw new Error("status must be pending");
     }
 
-    this._status = fail;
+    this._status = "fail";
 
     return this;
   }

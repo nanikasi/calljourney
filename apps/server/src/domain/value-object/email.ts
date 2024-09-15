@@ -1,4 +1,4 @@
-class Email {
+export class Email {
   private _emailAddress: string;
 
   constructor(email: string) {
@@ -6,7 +6,7 @@ class Email {
       throw new Error("Email is required");
     }
 
-    if (!Email.isValid(email)) {
+    if (Email.isValid(email) === false) {
       throw new Error("Email is invalid");
     }
 
@@ -22,6 +22,8 @@ class Email {
   }
 
   public static isValid(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/.test(
+      email,
+    );
   }
 }
