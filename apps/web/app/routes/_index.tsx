@@ -19,7 +19,9 @@ export default function Index() {
       <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-20">
         <div className="space-y-2 text-center">
           <h1 className="text-5xl font-bold">CallJourney</h1>
-          <p className="text-sm mt-2 font-semibold">AIがあなたの代わりに電話予約</p>
+          <p className="text-sm mt-2 font-semibold">
+            AIがあなたの代わりに電話予約
+          </p>
         </div>
         <div className="space-y-10">
           <ToReservationLink />

@@ -15,15 +15,18 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const phoneNumber = formData.get("phoneNumber") as string;
   const name = formData.get("name") as string;
-  const email = formData.get('email') as string;
+  const email = formData.get("email") as string;
 
-  const result = userReservationInfoSchema.safeParse({ phoneNumber, name, email});
-  
+  const result = userReservationInfoSchema.safeParse({
+    phoneNumber,
+    name,
+    email,
+  });
+
   if (!result.success) {
     const errors = result.error.format();
     return json({ errors, formData: Object.fromEntries(formData) });
@@ -32,28 +35,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   // Paramsを取得して次のページのParamsにつける
   // TODO: コード綺麗にする
   const url = new URL(request.url);
-  const restaurantPhoneNumber = url.searchParams.get('restaurantPhoneNumber') || '';
-  const customerCount = url.searchParams.get('customerCount') || '';
-  const reserveDate = url.searchParams.get('reserveDate') || '';
-  
+  const restaurantPhoneNumber =
+    url.searchParams.get("restaurantPhoneNumber") || "";
+  const customerCount = url.searchParams.get("customerCount") || "";
+  const reserveDate = url.searchParams.get("reserveDate") || "";
+
   // バリデーション成功時は次のページに遷移
-  return redirect(`/reservation/confirmation?restaurantPhoneNumber=${encodeURIComponent(restaurantPhoneNumber)}&CustomerCount=${encodeURIComponent(Number(customerCount))}&reserveDate=${encodeURIComponent(reserveDate)}&phoneNumber=${encodeURIComponent(phoneNumber)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+  return redirect(
+    `/reservation/confirmation?restaurantPhoneNumber=${encodeURIComponent(restaurantPhoneNumber)}&CustomerCount=${encodeURIComponent(Number(customerCount))}&reserveDate=${encodeURIComponent(reserveDate)}&phoneNumber=${encodeURIComponent(phoneNumber)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`,
+  );
 };
 
 export default function Index() {
-  const actionData = useActionData<typeof action>()
+  const actionData = useActionData<typeof action>();
 
   return (
     <div className="w-full flex flex-col items-center space-y-14">
       <ProcessExplanation explanationText="あなたの情報を入力してください" />
       <Form method="post" className="w-full space-y-1">
-        <Input 
+        <Input
           text="名前"
           inputName="name"
           placeholder="名前"
           errorMessage={actionData?.errors?.name?._errors[0]}
         />
-        <Input 
+        <Input
           text="電話番号"
           inputName="phoneNumber"
           placeholder="0123456789"
