@@ -8,6 +8,13 @@
       "when": 1726378648909,
       "tag": "0000_mushy_morlocks",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1726389477602,
+      "tag": "0001_lazy_frog_thor",
+      "breakpoints": true
     }
   ]
 }
