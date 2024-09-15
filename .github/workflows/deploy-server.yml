@@ -32,3 +32,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           DATABASE_ID: ${{ secrets.DATABASE_ID }}
+          TWILIO_API_URL = ${{ secrets.TWILIO_API_URL }}
+          TWILIO_ACCOUNT_SID = ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN = ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_PHONE_NUMBER = ${{ secrets.TWILIO_PHONE_NUMBER }}
