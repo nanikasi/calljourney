@@ -48,7 +48,7 @@ app.use("*", async (c, next) => {
 app
   .doc("/schema", {
     openapi: "3.0.0",
-    info: { version: "1.0.0", title: "monolog-server" },
+    info: { version: "1.0.0", title: "calljourney-server" },
   })
   .use("*", (c, next) => {
     const diContainer = new DIContainer<DependencyTypes>();
