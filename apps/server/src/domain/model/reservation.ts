@@ -1,3 +1,4 @@
+import type { Dayjs } from "dayjs";
 import type { Entity } from "../../util/utility-type";
 import { ID } from "../value-object/id";
 import type { Phone } from "../value-object/phone";
@@ -7,7 +8,7 @@ export class Reservation implements Entity<ID> {
   private _id: ID;
   private _userID: ID;
   private _phone: Phone;
-  private _time: Date;
+  private _time: Dayjs;
   private _customerCount: number;
   private _status: Status;
 
@@ -22,7 +23,7 @@ export class Reservation implements Entity<ID> {
     id: ID;
     userID: ID;
     phone: Phone;
-    time: Date;
+    time: Dayjs;
     customerCount: number;
     status: Status;
   }) {
@@ -59,7 +60,7 @@ export class Reservation implements Entity<ID> {
     phone,
     time,
     customerCount,
-  }: { userID: ID; phone: Phone; time: Date; customerCount: number }) {
+  }: { userID: ID; phone: Phone; time: Dayjs; customerCount: number }) {
     return new Reservation({
       id: ID.generate(),
       userID,
@@ -83,7 +84,7 @@ export class Reservation implements Entity<ID> {
   get phone(): Phone {
     return this._phone;
   }
-  get time(): Date {
+  get time(): Dayjs {
     return this._time;
   }
   get customerCount(): number {
