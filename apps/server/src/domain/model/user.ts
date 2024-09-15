@@ -11,7 +11,7 @@ export class User implements Entity<ID> {
     id,
     name,
     email,
-    phone
+    phone,
   }: { id: ID; name: string; email: Email; phone: Phone }) {
     if (!id) {
       throw new Error("ID is required");
@@ -36,7 +36,11 @@ export class User implements Entity<ID> {
     this._phone = phone;
   }
 
-  public static new({ name, email, phone }: { name: string; email: Email; phone: Phone }) {
+  public static new({
+    name,
+    email,
+    phone,
+  }: { name: string; email: Email; phone: Phone }) {
     return new User({ id: ID.generate(), name, email, phone });
   }
 

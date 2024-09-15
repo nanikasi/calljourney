@@ -11,7 +11,7 @@ export class Reservation implements Entity<ID> {
     id,
     userID,
     time,
-    customerCount
+    customerCount,
   }: { id: ID; userID: ID; time: Date; customerCount: number }) {
     if (!id) {
       throw new Error("ID is required");
@@ -36,7 +36,11 @@ export class Reservation implements Entity<ID> {
     this._customerCount = customerCount;
   }
 
-  public static new({ userID, time, customerCount }: { userID: ID; time: Date; customerCount: number }) {
+  public static new({
+    userID,
+    time,
+    customerCount,
+  }: { userID: ID; time: Date; customerCount: number }) {
     return new Reservation({ id: ID.generate(), userID, time, customerCount });
   }
 
