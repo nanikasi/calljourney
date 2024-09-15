@@ -3,7 +3,9 @@ import { drizzle } from "drizzle-orm/d1";
 import { eq } from "drizzle-orm";
 import { User } from "../../domain/model/user";
 import type { UserRepository } from "../../domain/repository/user-repository";
+import { Email } from "../../domain/value-object/email";
 import { ID } from "../../domain/value-object/id";
+import { Phone } from "../../domain/value-object/phone";
 import { type DBUser, users } from "./d1/schema.server";
 
 export class D1UserRepositoryImpl implements UserRepository {

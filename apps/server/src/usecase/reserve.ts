@@ -2,6 +2,8 @@ import { Reservation } from "../domain/model/reservation";
 import { User } from "../domain/model/user";
 import type { ReservationRepository } from "../domain/repository/reservation-repository";
 import type { UserRepository } from "../domain/repository/user-repository";
+import { Email } from "../domain/value-object/email";
+import { Phone } from "../domain/value-object/phone";
 import type { CallService } from "../service/call-service";
 
 type ReserveInput = {

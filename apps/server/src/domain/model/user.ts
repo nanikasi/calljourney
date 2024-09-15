@@ -1,5 +1,7 @@
 import type { Entity } from "../../util/utility-type";
+import type { Email } from "../value-object/email";
 import { ID } from "../value-object/id";
+import type { Phone } from "../value-object/phone";
 
 export class User implements Entity<ID> {
   private _id: ID;
