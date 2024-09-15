@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { Reservation } from "../../domain/model/reservation";
 import type { ReservationRepository } from "../../domain/repository/reservation-repository";
 import { ID } from "../../domain/value-object/id";
+import { Phone } from "../../domain/value-object/phone";
 import type { Status } from "../../domain/value-object/reservation-status";
 import { type DBReservation, reservations, users } from "./d1/schema.server";
 
@@ -30,6 +31,7 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
     const reservation = new Reservation({
       id: new ID(result.id),
       userID: new ID(result.userID),
+      phone: new Phone(result.phone),
       time: new Date(result.time),
       customerCount: result.customerCount,
       status: result.status as Status,
@@ -44,6 +46,7 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
     const dbReservation: DBReservation = {
       id: reservation.identity().value(),
       userID: reservation.userID.value(),
+      phone: reservation.phone.full,
       time: reservation.time.toISOString(),
       customerCount: reservation.customerCount,
       status: reservation.status,
@@ -69,6 +72,7 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
     const deleteReservation: DBReservation = {
       id: reservation.identity().value(),
       userID: reservation.userID.value(),
+      phone: reservation.phone.full,
       time: reservation.time.toISOString(),
       customerCount: reservation.customerCount,
       status: reservation.status,
