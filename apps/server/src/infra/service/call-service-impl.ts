@@ -24,6 +24,7 @@ export class CallServiceImpl implements CallService {
     const url = this._apiUrl;
 
     const time = reservation.time.tz("Asia/Tokyo");
+    const phoneWithPause = reservation.phone.local.split("").join("　.　.　");
 
     const params = new URLSearchParams();
     params.append("To", reservation.phone.international);
@@ -32,7 +33,7 @@ export class CallServiceImpl implements CallService {
       "Parameters",
       JSON.stringify({
         name: user.name,
-        phone: user.phone,
+        phone: phoneWithPause,
         customerCount: reservation.customerCount,
         date: `${time.date()}日`,
         time: `${time.hour()}時${time.minute()}分`,
