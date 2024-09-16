@@ -61,7 +61,7 @@ export default function Index() {
           text="予約時刻"
           inputName="reserveDate"
           placeholder="6/27/22:00(15分単位で)"
-          type="time"
+          type="datetime-local"
           errorMessage={actionData?.errors?.reserveDate?._errors[0]}
         />
         <div className="pt-7" />
