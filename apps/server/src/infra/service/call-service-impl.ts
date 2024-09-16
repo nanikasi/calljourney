@@ -23,6 +23,8 @@ export class CallServiceImpl implements CallService {
   async call(user: User, reservation: Reservation): Promise<void> {
     const url = this._apiUrl;
 
+    const phoneWithPause = reservation.phone.local.split("").join("　.　.　");
+
     const params = new URLSearchParams();
     params.append("To", reservation.phone.international);
     params.append("From", this._twilioPhoneNumber);
@@ -30,7 +32,7 @@ export class CallServiceImpl implements CallService {
       "Parameters",
       JSON.stringify({
         name: user.name,
-        phone: user.phone,
+        phone: phoneWithPause,
         customerCount: reservation.customerCount,
         date: "15日",
         time: "14時30分",
