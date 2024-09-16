@@ -14,6 +14,7 @@ workers_dev = true
 
 [vars]
 WEB_URL = "http://localhost:5173"
+SERVER_URL = "http://localhost:8787"
 TWILIO_API_URL = "${TWILIO_API_URL}"
 TWILIO_ACCOUNT_SID = "${TWILIO_ACCOUNT_SID}"
 TWILIO_AUTH_TOKEN = "${TWILIO_AUTH_TOKEN}"
@@ -24,7 +25,8 @@ SENDER_MAIL_ADDRESS = "${SENDER_MAIL_ADDRESS}"
 [env.production]
 name = "calljourney-server"
 [env.production.vars]
-WEB_URL = "https://calljourney.pages.dev/"
+WEB_URL = "https://calljourney.pages.dev"
+SERVER_URL = "https://calljourney-server.nanikasi1024.workers.dev"
 
 [[d1_databases]]
 binding = "DB"
