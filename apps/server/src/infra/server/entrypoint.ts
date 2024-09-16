@@ -21,6 +21,7 @@ import reserveSuccessRoute from "./route/reserve.success.post";
 export type Bindings = {
   DB: D1Database;
   WEB_URL: string;
+  SERVER_URL: string;
   TWILIO_API_URL: string;
   TWILIO_ACCOUNT_SID: string;
   TWILIO_AUTH_TOKEN: string;
@@ -78,6 +79,7 @@ app
         c.env.TWILIO_ACCOUNT_SID,
         c.env.TWILIO_AUTH_TOKEN,
         c.env.TWILIO_PHONE_NUMBER,
+        c.env.SERVER_URL,
       ),
     );
     diContainer.register(

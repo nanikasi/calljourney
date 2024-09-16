@@ -7,17 +7,20 @@ export class CallServiceImpl implements CallService {
   private _accountSID: string;
   private _authToken: string;
   private _twilioPhoneNumber: string;
+  private _callbackURL: string;
 
   constructor(
     apiUrl: string,
     accountSID: string,
     authToken: string,
     twilioPhoneNumber: string,
+    callbackURL: string,
   ) {
     this._apiUrl = apiUrl;
     this._accountSID = accountSID;
     this._authToken = authToken;
     this._twilioPhoneNumber = twilioPhoneNumber;
+    this._callbackURL = callbackURL;
   }
 
   async call(user: User, reservation: Reservation): Promise<void> {
@@ -38,6 +41,8 @@ export class CallServiceImpl implements CallService {
         date: `${time.date()}日`,
         time: `${time.hour()}時${time.minute()}分`,
         reservationID: reservation.identity().value(),
+        callbackSuccessURL: `${this._callbackURL}/reserve-success`,
+        callbackFailURL: `${this._callbackURL}/reserve-fail`,
       }),
     );
 
