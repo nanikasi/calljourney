@@ -6,32 +6,38 @@ const schema = createRoute({
   method: "post",
   path: "/reserve",
   request: {
-    query: z.object({
-      name: z.string().openapi({
-        example: "",
-        description: "name",
-      }),
-      email: z.string().min(1).openapi({
-        example: "",
-        description: "email",
-      }),
-      phone: z.string().min(1).openapi({
-        example: "",
-        description: "phone",
-      }),
-      restaurantPhone: z.string().min(1).openapi({
-        example: "",
-        description: "restaurantPhone",
-      }),
-      time: z.string().min(1).openapi({
-        example: "",
-        description: "time",
-      }),
-      customerCount: z.coerce.number().min(1).openapi({
-        example: 1,
-        description: "customerCount",
-      }),
-    }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            name: z.string().openapi({
+              example: "",
+              description: "name",
+            }),
+            email: z.string().min(1).openapi({
+              example: "",
+              description: "email",
+            }),
+            phone: z.string().min(1).openapi({
+              example: "",
+              description: "phone",
+            }),
+            restaurantPhone: z.string().min(1).openapi({
+              example: "",
+              description: "restaurantPhone",
+            }),
+            time: z.string().min(1).openapi({
+              example: "",
+              description: "time",
+            }),
+            customerCount: z.coerce.number().min(1).openapi({
+              example: 1,
+              description: "customerCount",
+            }),
+          }),
+        },
+      },
+    },
   },
   responses: {
     201: {
@@ -56,12 +62,12 @@ const route = new OpenAPIHono<{
 }>();
 
 route.openapi(schema, async (c) => {
-  const name = c.req.valid("query").name;
-  const email = c.req.valid("query").email;
-  const phone = c.req.valid("query").phone;
-  const restaurantPhone = c.req.valid("query").restaurantPhone;
-  const time = c.req.valid("query").time;
-  const customerCount = c.req.valid("query").customerCount;
+  const name = c.req.valid("json").name;
+  const email = c.req.valid("json").email;
+  const phone = c.req.valid("json").phone;
+  const restaurantPhone = c.req.valid("json").restaurantPhone;
+  const time = c.req.valid("json").time;
+  const customerCount = c.req.valid("json").customerCount;
 
   const di = c.get("diContainer");
 

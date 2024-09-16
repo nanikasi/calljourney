@@ -6,12 +6,18 @@ const schema = createRoute({
   method: "post",
   path: "/reserve-success",
   request: {
-    query: z.object({
-      reservationID: z.string().openapi({
-        example: "",
-        description: "unieqe id",
-      }),
-    }),
+    body: {
+      content: {
+        "application/json": {
+          schema: z.object({
+            reservationID: z.string().openapi({
+              example: "",
+              description: "unieqe id",
+            }),
+          }),
+        },
+      },
+    },
   },
   responses: {
     201: {
@@ -31,7 +37,7 @@ const route = new OpenAPIHono<{
 }>();
 
 route.openapi(schema, async (c) => {
-  const reservationID = c.req.valid("query").reservationID;
+  const reservationID = c.req.valid("json").reservationID;
 
   const di = c.get("diContainer");
 
