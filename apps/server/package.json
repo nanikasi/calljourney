@@ -16,8 +16,11 @@
   "dependencies": {
     "@hono/swagger-ui": "^0.4.1",
     "@hono/zod-openapi": "^0.16.0",
+    "dayjs": "^1.11.13",
     "drizzle-orm": "^0.33.0",
     "hono": "^4.5.3",
+    "timezone": "link:dayjs/plugin/timezone",
+    "utc": "link:dayjs/plugin/utc",
     "zod": "^3.23.8"
   },
   "devDependencies": {

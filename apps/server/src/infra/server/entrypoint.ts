@@ -2,6 +2,10 @@ import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
 
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import type { ReservationRepository } from "../../domain/repository/reservation-repository";
 import type { UserRepository } from "../../domain/repository/user-repository";
 import type { CallService } from "../../service/call-service";
@@ -35,6 +39,9 @@ export interface DependencyTypes {
   CallService: CallService;
   MailService: MailService;
 }
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const app = new OpenAPIHono<{
   Bindings: Bindings;

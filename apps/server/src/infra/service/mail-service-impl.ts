@@ -50,7 +50,7 @@ export class MailServiceImpl implements MailService {
 
       予約が確定しました。
       店舗電話番号: ${reservation.phone.local}
-      日時: ${reservation.time} ${reservation.time}
+      日時: ${reservation.time.tz("Asia/Tokyo").format("MM月DD日 HH時mm分")}
       予約人数: ${reservation.customerCount}
 
       当日は遅れないようにお気をつけてお店にお越しください。
@@ -70,7 +70,7 @@ export class MailServiceImpl implements MailService {
       お手数ですが、日時を変更して再度お電話お願いします。
 
       店舗電話番号: ${reservation.phone.local}
-      日時: ${reservation.time} ${reservation.time}
+      日時: ${reservation.time.tz("Asia/Tokyo").format("MM月DD日 HH時mm分")}
       予約人数: ${reservation.customerCount}
       
       CallJourney
