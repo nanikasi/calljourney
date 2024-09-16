@@ -5,6 +5,7 @@ import type {
 } from "@remix-run/cloudflare";
 import { Form, json, redirect, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/button";
+import { customizeDateFormat } from "~/features/reservation/functions/customizeDateFormat";
 import type { Reservation } from "~/features/reservation/types/reservation";
 
 export const meta: MetaFunction = () => {
@@ -53,7 +54,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Index() {
   const data: Reservation = useLoaderData();
-  // dataとlabelObject配列に変更
+
   const labels: { [key in keyof Reservation]: string } = {
     restaurantPhoneNumber: "お店の電話番号",
     customerCount: "来店人数",
@@ -62,10 +63,18 @@ export default function Index() {
     phoneNumber: "予約者の電話番号",
     email: "予約者のメールアドレス",
   };
-  const reservationInfoWithLabel = Object.entries(data).map(([key, value]) => ({
-    label: labels[key as keyof Reservation],
-    value: value,
-  }));
+
+  const formattedData = {
+    ...data,
+    reserveDate: customizeDateFormat(data.reserveDate),
+  };
+
+  const reservationInfoWithLabel = Object.entries(formattedData).map(
+    ([key, value]) => ({
+      label: labels[key as keyof Reservation],
+      value: value,
+    }),
+  );
 
   return (
     <div className="w-full flex flex-col items-center space-y-16">

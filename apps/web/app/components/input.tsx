@@ -2,7 +2,7 @@ type Props = {
   text: string;
   inputName: string;
   placeholder: string;
-  type?: "email" | "text" | "tel" | "number" | "time";
+  type?: "email" | "text" | "tel" | "number" | "datetime-local";
   errorMessage?: string;
 };
 

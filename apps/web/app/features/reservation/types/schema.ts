@@ -23,9 +23,16 @@ export const storeReservationInfoSchema = z.object({
       { message: "電話番号は10桁または11桁である必要があります" },
     ),
 
-  reserveDate: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-    message: "有効な時間を選択してください。",
-  }),
+  reserveDate: z.preprocess(
+    (val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+    },
+    z.date().refine((date) => !Number.isNaN(date.getTime()), {
+      message: "有効な日付と時間を選択してください。",
+    }),
+  ),
 });
 
 export const userReservationInfoSchema = z.object({
