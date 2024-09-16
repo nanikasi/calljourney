@@ -15,6 +15,7 @@ import { D1UserRepositoryImpl } from "../repository/d1-user-repository";
 import { CallServiceImpl } from "../service/call-service-impl";
 import { MailServiceImpl } from "../service/mail-service-impl";
 import { DIContainer } from "./di-container";
+import reserveFailRoute from "./route/reserve.fail.post";
 import reservePostRoute from "./route/reserve.post";
 import reserveSuccessRoute from "./route/reserve.success.post";
 
@@ -94,6 +95,7 @@ app
   })
   .get("/ui", swaggerUI({ url: "schema" }))
   .route("/", reservePostRoute)
-  .route("/", reserveSuccessRoute);
+  .route("/", reserveSuccessRoute)
+  .route("/", reserveFailRoute);
 
 export default app;
