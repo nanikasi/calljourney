@@ -39,5 +39,11 @@ binding = "DB"
 database_name = "calljourney-dev"
 database_id = "${DATABASE_ID}"
 migrations_dir = "./src/infra/repository/d1/migrations"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "calljourney-dev"
+database_id = "${DATABASE_ID}"
+migrations_dir = "./src/infra/repository/d1/migrations"
 EOL
 echo "generated wrangler toml"
