@@ -1,11 +1,12 @@
 import type { Reservation } from "../types/reservation";
 
 export interface ReservationRequest {
-  create: (input: Reservation) => Promise<void>;
+  create: (input: Reservation, serverURL: string) => Promise<void>;
 }
 
 const create: ReservationRequest["create"] = async (
   input: Reservation,
+  serverURL: string,
 ): Promise<void> => {
   const modifiedInputInput = {
     name: input.name,
@@ -16,7 +17,7 @@ const create: ReservationRequest["create"] = async (
     time: input.reserveDate,
   };
   try {
-    await fetch("http://localhost:8787/reserve", {
+    await fetch(`${serverURL}/reserve`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

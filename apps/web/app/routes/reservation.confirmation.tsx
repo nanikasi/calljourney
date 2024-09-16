@@ -39,7 +39,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const url = new URL(request.url);
   const restaurantPhoneNumber =
     url.searchParams.get("restaurantPhoneNumber") || "";
@@ -49,14 +49,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const name = url.searchParams.get("name") || "";
   const email = url.searchParams.get("email") || "";
 
-  await reservationRequest.create({
-    reserveDate,
-    restaurantPhoneNumber,
-    customerCount,
-    phoneNumber,
-    name,
-    email,
-  });
+  await reservationRequest.create(
+    {
+      reserveDate,
+      restaurantPhoneNumber,
+      customerCount,
+      phoneNumber,
+      name,
+      email,
+    },
+    context.cloudflare.env.SERVER_URL,
+  );
   return redirect("/call/complete");
 };
 

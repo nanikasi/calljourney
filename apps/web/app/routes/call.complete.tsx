@@ -1,9 +1,5 @@
-import type {
-  ActionFunctionArgs,
-  LoaderFunction,
-  MetaFunction,
-} from "@remix-run/cloudflare";
-import { json, Link, redirect, useLoaderData } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { json, Link, useLoaderData } from "@remix-run/react";
 import { z } from "zod";
 import type { Reservation } from "~/features/reservation/types/reservation";
 
@@ -55,21 +51,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     email,
     name,
   });
-};
-
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const url = new URL(request.url);
-  const restaurantPhoneNumber =
-    url.searchParams.get("restaurant_phone_number") || "";
-  const customerCount = url.searchParams.get("number_of_customers") || "";
-  const reserveDate = url.searchParams.get("reserve_date") || "";
-  const phoneNumber = url.searchParams.get("restaurant_phone_number") || "";
-  const name = url.searchParams.get("name") || "";
-  const email = url.searchParams.get("email") || "";
-
-  //API呼ぶ
-
-  return redirect("/");
 };
 
 export default function Index() {
