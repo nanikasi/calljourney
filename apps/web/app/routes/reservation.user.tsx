@@ -42,7 +42,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   // バリデーション成功時は次のページに遷移
   return redirect(
-    `/reservation/confirmation?restaurantPhoneNumber=${encodeURIComponent(restaurantPhoneNumber)}&CustomerCount=${encodeURIComponent(Number(customerCount))}&reserveDate=${encodeURIComponent(reserveDate)}&phoneNumber=${encodeURIComponent(phoneNumber)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`,
+    `/reservation/confirmation?restaurantPhoneNumber=${encodeURIComponent(restaurantPhoneNumber)}&customerCount=${encodeURIComponent(Number(customerCount))}&reserveDate=${encodeURIComponent(reserveDate)}&phoneNumber=${encodeURIComponent(phoneNumber)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`,
   );
 };
 

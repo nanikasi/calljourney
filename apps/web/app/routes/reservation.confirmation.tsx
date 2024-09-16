@@ -5,6 +5,7 @@ import type {
 } from "@remix-run/cloudflare";
 import { Form, json, redirect, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/button";
+import { reservationRequest } from "~/features/reservation/api";
 import { customizeDateFormat } from "~/features/reservation/functions/customizeDateFormat";
 import type { Reservation } from "~/features/reservation/types/reservation";
 
@@ -22,7 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const restaurantPhoneNumber =
     url.searchParams.get("restaurantPhoneNumber") || "";
-  const numberOfCustomers = url.searchParams.get("customerCount") || "";
+  const customerCount = url.searchParams.get("customerCount") || "";
   const reserveDate = url.searchParams.get("reserveDate") || "";
   const phoneNumber = url.searchParams.get("phoneNumber") || "";
   const name = url.searchParams.get("name") || "";
@@ -30,7 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   return json({
     restaurantPhoneNumber,
-    numberOfCustomers,
+    customerCount,
     reserveDate,
     phoneNumber,
     email,
@@ -42,13 +43,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const url = new URL(request.url);
   const restaurantPhoneNumber =
     url.searchParams.get("restaurantPhoneNumber") || "";
-  const numberOfCustomers = url.searchParams.get("customerCount") || "";
+  const customerCount = url.searchParams.get("customerCount") || "";
   const reserveDate = url.searchParams.get("reserveDate") || "";
   const phoneNumber = url.searchParams.get("phoneNumber") || "";
   const name = url.searchParams.get("name") || "";
   const email = url.searchParams.get("email") || "";
 
-  //API呼ぶ
+  await reservationRequest.create({
+    reserveDate,
+    restaurantPhoneNumber,
+    customerCount,
+    phoneNumber,
+    name,
+    email,
+  });
   return redirect("/call/complete");
 };
 
