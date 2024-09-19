@@ -6,8 +6,8 @@ import type {
 import { Form, json, redirect, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/button";
 import { reservationRequest } from "~/features/reservation/api";
-import { customizeDateFormat } from "~/features/reservation/functions/customizeDateFormat";
 import type { Reservation } from "~/features/reservation/types/reservation";
+import { getSession } from "~/session";
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,54 +19,60 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+type ReservationConfirmationDTO = {
+  restaurantPhoneNumber: string;
+  reserveDate: string;
+  customerCount: string;
+  name: string;
+  phoneNumber: string;
+  email: string;
+};
+
 export const loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url);
-  const restaurantPhoneNumber =
-    url.searchParams.get("restaurantPhoneNumber") || "";
-  const customerCount = url.searchParams.get("customerCount") || "";
-  const reserveDate = url.searchParams.get("reserveDate") || "";
-  const phoneNumber = url.searchParams.get("phoneNumber") || "";
-  const name = url.searchParams.get("name") || "";
-  const email = url.searchParams.get("email") || "";
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const reservation = session.get("reservation");
+  const user = session.get("user");
+
+  if (!reservation || !user) {
+    return redirect("/reservation/store");
+  }
 
   return json({
-    restaurantPhoneNumber,
-    customerCount,
-    reserveDate,
-    phoneNumber,
-    email,
-    name,
+    restaurantPhoneNumber: reservation.restaurantPhoneNumber,
+    reserveDate: reservation.reserveDate,
+    customerCount: reservation.customerCount.toString,
+    name: user.name,
+    phoneNumber: user.phoneNumber,
+    email: user.email,
   });
 };
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
-  const url = new URL(request.url);
-  const restaurantPhoneNumber =
-    url.searchParams.get("restaurantPhoneNumber") || "";
-  const customerCount = url.searchParams.get("customerCount") || "";
-  const reserveDate = url.searchParams.get("reserveDate") || "";
-  const phoneNumber = url.searchParams.get("phoneNumber") || "";
-  const name = url.searchParams.get("name") || "";
-  const email = url.searchParams.get("email") || "";
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const reservation = session.get("reservation");
+  const user = session.get("user");
+
+  if (!reservation || !user) {
+    return redirect("/reservation/store");
+  }
 
   await reservationRequest.create(
     {
-      reserveDate,
-      restaurantPhoneNumber,
-      customerCount,
-      phoneNumber,
-      name,
-      email,
+      user: user,
+      reservation: reservation,
     },
     context.cloudflare.env.SERVER_URL,
   );
+
   return redirect("/call/complete");
 };
 
 export default function Index() {
-  const data: Reservation = useLoaderData();
+  const data: ReservationConfirmationDTO = useLoaderData();
 
-  const labels: { [key in keyof Reservation]: string } = {
+  const labels: { [key in keyof ReservationConfirmationDTO]: string } = {
     restaurantPhoneNumber: "お店の電話番号",
     customerCount: "来店人数",
     reserveDate: "予約時刻",
@@ -75,17 +81,10 @@ export default function Index() {
     email: "予約者のメールアドレス",
   };
 
-  const formattedData = {
-    ...data,
-    reserveDate: customizeDateFormat(data.reserveDate),
-  };
-
-  const reservationInfoWithLabel = Object.entries(formattedData).map(
-    ([key, value]) => ({
-      label: labels[key as keyof Reservation],
-      value: value,
-    }),
-  );
+  const reservationInfoWithLabel = Object.entries(data).map(([key, value]) => ({
+    label: labels[key as keyof Reservation],
+    value: value,
+  }));
 
   return (
     <div className="w-full flex flex-col items-center space-y-16">

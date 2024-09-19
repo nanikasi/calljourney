@@ -4,6 +4,7 @@ import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { userReservationInfoSchema } from "~/features/reservation/types/schema";
 import { ProcessExplanation } from "~/features/reservation/ui/processExplanation";
+import { commitSession, getSession } from "~/session";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,6 +18,7 @@ export const meta: MetaFunction = () => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
+
   const phoneNumber = formData.get("phoneNumber") as string;
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
@@ -32,18 +34,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors, formData: Object.fromEntries(formData) });
   }
 
-  // Paramsを取得して次のページのParamsにつける
-  // TODO: コード綺麗にする
-  const url = new URL(request.url);
-  const restaurantPhoneNumber =
-    url.searchParams.get("restaurantPhoneNumber") || "";
-  const customerCount = url.searchParams.get("customerCount") || "";
-  const reserveDate = url.searchParams.get("reserveDate") || "";
+  const session = await getSession(request.headers.get("Cookie"));
+  const user = {
+    phoneNumber: phoneNumber,
+    name: name,
+    email: email,
+  };
+  session.set("user", user);
 
-  // バリデーション成功時は次のページに遷移
-  return redirect(
-    `/reservation/confirmation?restaurantPhoneNumber=${encodeURIComponent(restaurantPhoneNumber)}&customerCount=${encodeURIComponent(Number(customerCount))}&reserveDate=${encodeURIComponent(reserveDate)}&phoneNumber=${encodeURIComponent(phoneNumber)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`,
-  );
+  return redirect("/reservation/confirmation", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export default function Index() {
