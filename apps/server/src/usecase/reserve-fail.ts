@@ -31,7 +31,7 @@ export async function reserveFail(
   }
 
   const failReservation = reservation.fail();
-  repositories.reservationRepository.save(failReservation);
+  await repositories.reservationRepository.save(failReservation);
 
   return services.mailService.sendFail(user, failReservation);
 }
