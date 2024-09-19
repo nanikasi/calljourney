@@ -1,5 +1,5 @@
+import type { User } from "~/features/user/types/user";
 import type { Reservation } from "../types/reservation";
-import type { User } from "../types/user";
 
 export interface ReservationRequest {
   create: (
