@@ -1,4 +1,5 @@
 import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import type { Entity } from "../../util/utility-type";
 import { ID } from "../value-object/id";
 import type { Phone } from "../value-object/phone";
@@ -61,6 +62,11 @@ export class Reservation implements Entity<ID> {
     time,
     customerCount,
   }: { userID: ID; phone: Phone; time: Dayjs; customerCount: number }) {
+    const now = dayjs();
+    if (!time.isAfter(now)) {
+      throw new Error("time must be future");
+    }
+
     return new Reservation({
       id: ID.generate(),
       userID,
