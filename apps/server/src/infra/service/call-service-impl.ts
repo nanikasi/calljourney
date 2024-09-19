@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import type { Reservation } from "../../domain/model/reservation";
 import type { User } from "../../domain/model/user";
 import type { CallService } from "../../service/call-service";
@@ -27,6 +28,16 @@ export class CallServiceImpl implements CallService {
     const url = this._apiUrl;
 
     const time = reservation.time.tz("Asia/Tokyo");
+    const now = dayjs().tz("Asia/Tokyo");
+
+    let timeText = time.format("MM月DD日");
+    if (time.isSame(now, "day")) {
+      timeText = "本日";
+    }
+    if (time.isSame(now.add(1, "day"), "day")) {
+      timeText = "明日";
+    }
+
     const phoneWithPause = reservation.phone.local.split("").join("　.　.　");
 
     const params = new URLSearchParams();
@@ -38,7 +49,7 @@ export class CallServiceImpl implements CallService {
         name: user.name,
         phone: phoneWithPause,
         customerCount: reservation.customerCount,
-        date: `${time.date()}日`,
+        date: timeText,
         time: `${time.hour()}時${time.minute()}分`,
         reservationID: reservation.identity().value(),
         callbackSuccessURL: `${this._callbackURL}/reserve-success`,
