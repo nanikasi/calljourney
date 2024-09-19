@@ -1,21 +1,29 @@
 import type { Reservation } from "../types/reservation";
+import type { User } from "../types/user";
 
 export interface ReservationRequest {
-  create: (input: Reservation, serverURL: string) => Promise<void>;
+  create: (
+    input: { user: User; reservation: Reservation },
+    serverURL: string,
+  ) => Promise<void>;
 }
 
 const create: ReservationRequest["create"] = async (
-  input: Reservation,
+  input: {
+    user: User;
+    reservation: Reservation;
+  },
   serverURL: string,
 ): Promise<void> => {
   const modifiedInputInput = {
-    name: input.name,
-    email: input.email,
-    customerCount: input.customerCount,
-    phone: input.phoneNumber,
-    restaurantPhone: input.restaurantPhoneNumber,
-    time: input.reserveDate,
+    name: input.user.name,
+    email: input.user.email,
+    phone: input.user.phoneNumber,
+    customerCount: input.reservation.customerCount,
+    restaurantPhone: input.reservation.restaurantPhoneNumber,
+    time: input.reservation.reserveDate,
   };
+
   try {
     await fetch(`${serverURL}/reserve`, {
       method: "POST",

@@ -1,9 +1,11 @@
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { Form, json, redirect, useActionData } from "@remix-run/react";
+import dayjs from "dayjs";
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { storeReservationInfoSchema } from "~/features/reservation/types/schema";
 import { ProcessExplanation } from "~/features/reservation/ui/processExplanation";
+import { commitSession, getSession } from "~/features/share/func/session";
 
 export const meta: MetaFunction = () => {
   return [
@@ -32,10 +34,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors, formData: Object.fromEntries(formData) });
   }
 
-  // バリデーション成功時は次のページに遷移
-  return redirect(
-    `/reservation/user?restaurantPhoneNumber=${encodeURIComponent(restaurantPhoneNumber)}&customerCount=${encodeURIComponent(Number(customerCount))}&reserveDate=${encodeURIComponent(reserveDate)}`,
-  );
+  const session = await getSession(request.headers.get("Cookie"));
+  const reservation = {
+    restaurantPhoneNumber: restaurantPhoneNumber,
+    reserveDate: dayjs.tz(reserveDate, "Asia/Tokyo"),
+    customerCount: Number(customerCount),
+  };
+  session.set("reservation", reservation);
+
+  return redirect("/reservation/user", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export default function Index() {

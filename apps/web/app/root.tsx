@@ -6,8 +6,15 @@ import {
   ScrollRestoration,
   useLocation,
 } from "@remix-run/react";
+import dayjs from "dayjs";
+import "dayjs/locale/ja";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { Header } from "./components/header";
 import "./tailwind.css";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
