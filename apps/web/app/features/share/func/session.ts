@@ -1,6 +1,6 @@
 import { createCookieSessionStorage } from "@remix-run/cloudflare";
-import type { Reservation } from "./features/reservation/types/reservation";
-import type { User } from "./features/reservation/types/user";
+import type { Reservation } from "~/features/reservation/types/reservation";
+import type { User } from "~/features/user/types/user";
 
 type SessionData = {
   user: User;
