@@ -4,7 +4,7 @@ import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { userReservationInfoSchema } from "~/features/reservation/types/schema";
 import { ProcessExplanation } from "~/features/reservation/ui/processExplanation";
-import { commitSession, getSession } from "~/session";
+import { commitSession, getSession } from "~/features/share/func/session";
 
 export const meta: MetaFunction = () => {
   return [

@@ -7,7 +7,7 @@ import { Form, json, redirect, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/button";
 import { reservationRequest } from "~/features/reservation/api";
 import type { Reservation } from "~/features/reservation/types/reservation";
-import { getSession } from "~/session";
+import { getSession } from "~/features/share/func/session";
 
 export const meta: MetaFunction = () => {
   return [
