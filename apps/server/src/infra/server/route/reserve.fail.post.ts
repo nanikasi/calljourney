@@ -6,6 +6,11 @@ const schema = createRoute({
   method: "post",
   path: "/reserve-fail",
   request: {
+    headers: z.object({
+      "X-Twilio-Signature": z
+        .string()
+        .min(1, "X-Twilio-Signature header is required"),
+    }),
     body: {
       content: {
         "application/json": {
