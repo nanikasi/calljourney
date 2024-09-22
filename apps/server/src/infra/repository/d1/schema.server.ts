@@ -5,6 +5,8 @@ export const users = sqliteTable("users", {
   name: text("name").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
 });
 export type DBUser = typeof users.$inferSelect;
 
@@ -15,5 +17,7 @@ export const reservations = sqliteTable("reservations", {
   time: text("time").notNull(),
   customerCount: integer("customer_count").notNull(),
   status: text("status").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
 });
 export type DBReservation = typeof reservations.$inferSelect;

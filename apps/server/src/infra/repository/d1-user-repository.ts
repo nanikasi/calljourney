@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/d1";
 
+import dayjs from "dayjs";
 import { eq } from "drizzle-orm";
 import { User } from "../../domain/model/user";
 import type { UserRepository } from "../../domain/repository/user-repository";
@@ -41,34 +42,37 @@ export class D1UserRepositoryImpl implements UserRepository {
   async save(user: User): Promise<void> {
     const db = drizzle(this._db);
 
-    const dbUser: DBUser = {
-      id: user.identity().value(),
-      name: user.name,
-      email: user.email.full,
-      phone: user.phone.local,
-    };
-
-    const existUser = await db
+    const existUsers: DBUser[] = await db
       .select()
       .from(users)
-      .where(eq(users.id, dbUser.id));
+      .where(eq(users.id, user.identity().value()))
+      .limit(1);
 
-    if (existUser.length === 0) {
+    if (existUsers.length === 0) {
+      const dbUser: DBUser = {
+        id: user.identity().value(),
+        name: user.name,
+        email: user.email.full,
+        phone: user.phone.local,
+        createdAt: dayjs().toISOString(),
+        updatedAt: dayjs().toISOString(),
+      };
       await db.insert(users).values(dbUser);
     } else {
+      const dbUser: DBUser = {
+        id: user.identity().value(),
+        name: user.name,
+        email: user.email.full,
+        phone: user.phone.local,
+        createdAt: existUsers[0].createdAt,
+        updatedAt: dayjs().toISOString(),
+      };
       await db.update(users).set(dbUser).where(eq(users.id, dbUser.id));
     }
   }
 
   async delete(user: User): Promise<void> {
     const db = drizzle(this._db);
-    const deleteUser: DBUser = {
-      id: user.identity().value(),
-      name: user.name,
-      email: user.email.full,
-      phone: user.phone.local,
-    };
-
-    await db.delete(users).where(eq(users.id, deleteUser.id));
+    await db.delete(users).where(eq(users.id, user.identity().value()));
   }
 }

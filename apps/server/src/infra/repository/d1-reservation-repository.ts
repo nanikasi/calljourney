@@ -43,24 +43,34 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
 
   async save(reservation: Reservation): Promise<void> {
     const db = drizzle(this._db);
-
-    const dbReservation: DBReservation = {
-      id: reservation.identity().value(),
-      userID: reservation.userID.value(),
-      phone: reservation.phone.local,
-      time: reservation.time.toISOString(),
-      customerCount: reservation.customerCount,
-      status: reservation.status,
-    };
-
-    const existReservation = await db
+    const existDBReservation = await db
       .select()
       .from(reservations)
-      .where(eq(reservations.id, dbReservation.id));
+      .where(eq(reservations.id, reservation.identity().value()));
 
-    if (existReservation.length === 0) {
+    if (existDBReservation.length === 0) {
+      const dbReservation: DBReservation = {
+        id: reservation.identity().value(),
+        userID: reservation.userID.value(),
+        phone: reservation.phone.local,
+        time: reservation.time.toISOString(),
+        customerCount: reservation.customerCount,
+        status: reservation.status,
+        createdAt: dayjs().toISOString(),
+        updatedAt: dayjs().toISOString(),
+      };
       await db.insert(reservations).values(dbReservation);
     } else {
+      const dbReservation: DBReservation = {
+        id: reservation.identity().value(),
+        userID: reservation.userID.value(),
+        phone: reservation.phone.local,
+        time: reservation.time.toISOString(),
+        customerCount: reservation.customerCount,
+        status: reservation.status,
+        createdAt: existDBReservation[0].createdAt,
+        updatedAt: dayjs().toISOString(),
+      };
       await db
         .update(reservations)
         .set(dbReservation)
@@ -70,15 +80,6 @@ export class D1ReservationRepositoryImpl implements ReservationRepository {
 
   async delete(reservation: Reservation): Promise<void> {
     const db = drizzle(this._db);
-    const deleteReservation: DBReservation = {
-      id: reservation.identity().value(),
-      userID: reservation.userID.value(),
-      phone: reservation.phone.local,
-      time: reservation.time.toISOString(),
-      customerCount: reservation.customerCount,
-      status: reservation.status,
-    };
-
-    await db.delete(users).where(eq(users.id, deleteReservation.id));
+    await db.delete(users).where(eq(users.id, reservation.identity().value()));
   }
 }
