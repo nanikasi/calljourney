@@ -4,6 +4,7 @@ import type {
   MetaFunction,
 } from "@remix-run/cloudflare";
 import { Form, json, redirect, useLoaderData } from "@remix-run/react";
+import dayjs from "dayjs";
 import { Button } from "~/components/button";
 import { reservationRequest } from "~/features/reservation/api";
 import type { Reservation } from "~/features/reservation/types/reservation";
@@ -40,7 +41,9 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   return json({
     restaurantPhoneNumber: reservation.restaurantPhoneNumber,
-    reserveDate: reservation.reserveDate,
+    reserveDate: dayjs(reservation.reserveDate)
+      .tz("Asia/Tokyo")
+      .format("YYYY年MM月DD日HH時mm分"),
     customerCount: reservation.customerCount.toString,
     name: user.name,
     phoneNumber: user.phoneNumber,
