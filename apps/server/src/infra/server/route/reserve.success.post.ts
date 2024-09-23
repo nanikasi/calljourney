@@ -1,11 +1,17 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
 import { reserveSuccess } from "../../../usecase/reserve-success";
 import type { Bindings, VariablesType } from "../entrypoint";
+import { twilioAuthMiddleware } from "../middleware/twilio-auth-middleware";
 
 const schema = createRoute({
   method: "post",
   path: "/reserve-success",
   request: {
+    headers: z.object({
+      "X-Twilio-Signature": z
+        .string()
+        .min(1, "X-Twilio-Signature header is required"),
+    }),
     body: {
       content: {
         "application/json": {
@@ -19,6 +25,7 @@ const schema = createRoute({
       },
     },
   },
+  middleware: [twilioAuthMiddleware],
   responses: {
     201: {
       content: {
