@@ -3,12 +3,14 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/cloudflare";
-import { Form, json, redirect, useLoaderData } from "@remix-run/react";
+import { json, redirect, useLoaderData } from "@remix-run/react";
 import dayjs from "dayjs";
 import { Button } from "~/components/button";
-import { reservationRequest } from "~/features/reservation/api";
 import type { Reservation } from "~/features/reservation/types/reservation";
 import { getSession } from "~/features/share/func/session";
+
+import { useFetcher } from "@remix-run/react";
+import { reservationRequest } from "~/features/reservation/api";
 
 export const meta: MetaFunction = () => {
   return [
@@ -51,6 +53,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 };
 
+type ActionData = {
+  error?: string;
+};
+
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   const session = await getSession(request.headers.get("Cookie"));
 
@@ -61,14 +67,17 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     return redirect("/reservation/store");
   }
 
-  await reservationRequest.create(
-    {
-      user: user,
-      reservation: reservation,
-    },
-    context.cloudflare.env.SERVER_URL,
-  );
-
+  try {
+    await reservationRequest.create(
+      {
+        user: user,
+        reservation: reservation,
+      },
+      context.cloudflare.env.SERVER_URL,
+    );
+  } catch (e) {
+    return { error: "予約が完了しませんでした。" };
+  }
   return redirect("/call/complete");
 };
 
@@ -89,6 +98,15 @@ export default function Index() {
     value: value,
   }));
 
+  const fetcher = useFetcher<ActionData>();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    fetcher.submit(formData, { method: "post" });
+  };
+
   return (
     <div className="w-full flex flex-col items-center space-y-16">
       <div className="w-full flex flex-col items-center text-center space-y-20">
@@ -102,9 +120,13 @@ export default function Index() {
           </div>
         ))}
       </div>
-      <Form method="post" className="w-full">
-        <Button text="予約する" />
-      </Form>
+      <fetcher.Form className="w-full" onSubmit={handleSubmit}>
+        <Button
+          text={fetcher.state === "submitting" ? "処理中..." : "予約する"}
+          disabled={fetcher.state === "submitting"}
+        />
+      </fetcher.Form>
+      {fetcher.data?.error && <div className="error">{fetcher.data.error}</div>}
     </div>
   );
 }
