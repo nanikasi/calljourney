@@ -48,14 +48,17 @@ export class MailServiceImpl implements MailService {
     const textContent = `
       ${user.name}様
 
-      予約が確定しました。
-      店舗電話番号: ${reservation.phone.local}
-      日時: ${reservation.time.tz("Asia/Tokyo").format("MM月DD日 HH時mm分")}
-      予約人数: ${reservation.customerCount}
+予約が確定しました。
+店舗電話番号: ${reservation.phone.local}
+日時: ${reservation.time.tz("Asia/Tokyo").format("MM月DD日 HH時mm分")}
+予約人数: ${reservation.customerCount}
 
-      当日は遅れないようにお気をつけてお店にお越しください。
+当日は遅れないようにお気をつけてお店にお越しください。
 
-      CallJourney
+利用後アンケートにご協力ください。
+https://docs.google.com/forms/d/e/1FAIpQLSdwsZqF74Ll63fFMvU0SQtOkDUoG1h-y83wplw5AOl0KNBwpw/viewform?entry.327336390=${user.identity().value()}
+
+CallJourney
     `;
 
     return await this.send(user, subject, textContent);
@@ -66,14 +69,17 @@ export class MailServiceImpl implements MailService {
     const textContent = `
       ${user.name}様
 
-      予約することができませんでした。
-      お手数ですが、日時を変更して再度お電話お願いします。
+予約することができませんでした。
+お手数ですが、日時を変更して再度お電話お願いします。
 
-      店舗電話番号: ${reservation.phone.local}
-      日時: ${reservation.time.tz("Asia/Tokyo").format("MM月DD日 HH時mm分")}
-      予約人数: ${reservation.customerCount}
+店舗電話番号: ${reservation.phone.local}
+日時: ${reservation.time.tz("Asia/Tokyo").format("MM月DD日 HH時mm分")}
+予約人数: ${reservation.customerCount}
+
+利用後アンケートにご協力ください。
+https://docs.google.com/forms/d/e/1FAIpQLSeZ0UKQLeWaELi-lEFlvjqGZRuMyZMHXIjjXjIVZUD_A1IqKA/viewform?entry.327336390=${user.identity().value()}
       
-      CallJourney
+CallJourney
     `;
 
     return await this.send(user, subject, textContent);
