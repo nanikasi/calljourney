@@ -24,16 +24,15 @@ const create: ReservationRequest["create"] = async (
     time: input.reservation.reserveDate,
   };
 
-  try {
-    await fetch(`${serverURL}/reserve`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(modifiedInputInput),
-    });
-  } catch (error) {
-    console.error(error);
+  const response = await fetch(`${serverURL}/reserve`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(modifiedInputInput),
+  });
+  if (!response.ok) {
+    throw new Error(response.statusText);
   }
 };
 
