@@ -22,6 +22,13 @@
       "when": 1726417339050,
       "tag": "0002_foamy_nightmare",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1727001094114,
+      "tag": "0003_wild_cloak",
+      "breakpoints": true
     }
   ]
 }
