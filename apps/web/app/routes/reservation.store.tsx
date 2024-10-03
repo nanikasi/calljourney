@@ -2,6 +2,7 @@ import type { ActionFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
 import { Form, json, redirect, useActionData } from "@remix-run/react";
 import dayjs from "dayjs";
 import { Button } from "~/components/button";
+import { DateTimeInput } from "~/components/date-time-input";
 import { Input } from "~/components/input";
 import { storeReservationInfoSchema } from "~/features/reservation/types/schema";
 import { ProcessExplanation } from "~/features/reservation/ui/processExplanation";
@@ -68,11 +69,11 @@ export default function Index() {
           type="number"
           errorMessage={actionData?.errors?.customerCount?._errors[0]}
         />
-        <Input
+        <DateTimeInput
           text="予約時刻"
           inputName="reserveDate"
           placeholder="6/27/22:00(15分単位で)"
-          type="datetime-local"
+          min={dayjs().tz("Asia/Tokyo").format("YYYY-MM-DDTHH:mm")}
           errorMessage={actionData?.errors?.reserveDate?._errors[0]}
         />
         <div className="pt-7" />
