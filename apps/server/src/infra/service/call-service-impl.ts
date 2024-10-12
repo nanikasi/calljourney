@@ -25,8 +25,6 @@ export class CallServiceImpl implements CallService {
   }
 
   async call(user: User, reservation: Reservation): Promise<void> {
-    const url = `${this._apiUrl}/call`;
-
     const time = reservation.time.tz("Asia/Tokyo");
     const now = dayjs().tz("Asia/Tokyo");
 
@@ -40,28 +38,30 @@ export class CallServiceImpl implements CallService {
 
     const phoneWithPause = reservation.phone.local.split("").join("　.　.　");
 
-    const params = new URLSearchParams();
-    params.append(
-      "Parameters",
-      JSON.stringify({
-        restaurantNumber: reservation.phone.international,
-        name: user.name,
-        phone: phoneWithPause,
-        customerCount: reservation.customerCount,
-        date: timeText,
-        time: `${time.hour()}時${time.minute()}分`,
-        reservationID: reservation.identity().value(),
-        callbackSuccessURL: `${this._callbackURL}/reserve-success`,
-        callbackFailURL: `${this._callbackURL}/reserve-fail`,
-      }),
-    );
+    const url = `${this._apiUrl}/call?phone=${encodeURIComponent(phoneWithPause)}&restaurantNumber=${reservation.phone.international}&name=${user.name}&date=${timeText}&customerCount=${reservation.customerCount}`;
+
+    // const params = new URLSearchParams();
+    // params.append(
+    //   "Parameters",
+    //   JSON.stringify({
+    //     restaurantNumber: reservation.phone.international,
+    //     name: user.name,
+    //     phone: phoneWithPause,
+    //     customerCount: reservation.customerCount,
+    //     date: timeText,
+    //     time: `${time.hour()}時${time.minute()}分`,
+    //     reservationID: reservation.identity().value(),
+    //     callbackSuccessURL: `${this._callbackURL}/reserve-success`,
+    //     callbackFailURL: `${this._callbackURL}/reserve-fail`,
+    //   }),
+    // );
 
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: params,
+      // body: params,
     };
 
     const response = await fetch(url, options);
