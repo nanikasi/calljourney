@@ -116,8 +116,8 @@ fastify.register(async (fastify) => {
 
     let streamSid = null;
 
-    const sendSessionUpdate = (name, reserve_date, number) => {
-      const prompt = `${SYSTEM_MESSAGE}\n- 【予約時間】${reserve_date}\n- 【電話番号】${number} \n- 【名前】${name}`;
+    const sendSessionUpdate = () => {
+      const prompt = `${SYSTEM_MESSAGE}\n- 【予約時間】本日の18時\n- 【電話番号】080 1234 5678 \n- 【名前】なかにし なおと`;
 
       const sessionUpdate = {
         type: "session.update",
@@ -138,12 +138,8 @@ fastify.register(async (fastify) => {
 
     // Open event for OpenAI WebSocket
     openAiWs.on("open", () => {
-      const url = new URL(req.url, `wss://${req.headers.host}`);
-      const { number, name, reserve_date } = Object.fromEntries(
-        url.searchParams,
-      );
       console.log("Connected to the OpenAI Realtime API");
-      sendSessionUpdate(name, reserve_date, number);
+      setTimeout(sendSessionUpdate, 250);
     });
 
     // Listen for messages from the OpenAI WebSocket (and send to Twilio if necessary)
