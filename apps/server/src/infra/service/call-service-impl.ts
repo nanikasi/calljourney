@@ -41,11 +41,10 @@ export class CallServiceImpl implements CallService {
     const phoneWithPause = reservation.phone.local.split("").join("　.　.　");
 
     const params = new URLSearchParams();
-    params.append("To", reservation.phone.international);
-    params.append("From", this._twilioPhoneNumber);
     params.append(
       "Parameters",
       JSON.stringify({
+        restaurantNumber: reservation.phone.international,
         name: user.name,
         phone: phoneWithPause,
         customerCount: reservation.customerCount,
@@ -60,7 +59,6 @@ export class CallServiceImpl implements CallService {
     const options = {
       method: "POST",
       headers: {
-        Authorization: `Basic ${btoa(`${this._accountSID}:${this._authToken}`)}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: params,
