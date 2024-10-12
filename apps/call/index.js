@@ -63,21 +63,21 @@ fastify.get("/", async (request, reply) => {
 });
 
 fastify.post("/call", async (request, reply) => {
-  const { number, restaurant_number, name, reserve_date } = request.query;
+  const { phone, restaurantNumber, name, date, customerCount } = request.body;
 
-  if (!number || !restaurant_number || !name || !reserve_date) {
+  if (!phone || !restaurantNumber || !name || !date || !customerCount) {
     return reply.status(400).send({ error: "vars are required" });
   }
 
   try {
     // Make the call using Twilio
     const call = await client.calls.create({
-      to: restaurant_number, // The number to call
+      to: restaurantNumber, // The number to call
       from: TWILIO_PHONE_NUMBER, // Your Twilio phone number
-      url: `https://${request.headers.host}/incoming-call?number=${encodeURIComponent(number)}&name=${encodeURIComponent(name)}&reserve_date=${encodeURIComponent(reserve_date)}`, // The URL for TwiML instructions
+      url: `https://${request.headers.host}/incoming-call?number=${encodeURIComponent(phone)}&name=${encodeURIComponent(name)}&reserve_date=${encodeURIComponent(date)}&customer_count=${encodeURIComponent(customerCount)}`, // The URL for TwiML instructions
     });
 
-    reply.send({ message: `Calling ${number}`, callSid: call.sid });
+    reply.send({ message: `Calling ${restaurantNumber}`, callSid: call.sid });
   } catch (error) {
     console.error("Error making call:", error);
     reply.status(500).send({ error: "Failed to make the call" });
@@ -87,7 +87,12 @@ fastify.post("/call", async (request, reply) => {
 // Route for Twilio to handle incoming and outgoing calls
 // <Say> punctuation to improve text-to-speech translation
 fastify.all("/incoming-call", async (request, reply) => {
-  const { number, name, reserve_date } = request.query;
+  const { number, name, reserve_date, customer_count } = request.query;
+
+  if (!number || !name || !reserve_date || !customer_count) {
+    return reply.status(400).send({ error: "vars are required" });
+  }
+
   console.log(number);
   console.log(name);
   console.log(reserve_date);
@@ -98,14 +103,6 @@ fastify.all("/incoming-call", async (request, reply) => {
                                   <Stream url="wss://${request.headers.host}/media-stream" />
                               </Connect>
                           </Response>`;
-  const twimlResponseForLog = `<?xml version="1.0" encoding="UTF-8"?>
-                          <Response>
-                              <Say>O.K.</Say>
-                              <Connect>
-                                  <Stream url="wss://${request.headers.host}/media-stream?number=${encodeURIComponent(number)}&name=${encodeURIComponent(name)}&reserve_date=${encodeURIComponent(reserve_date)}" />
-                              </Connect>
-                          </Response>`;
-  console.log(twimlResponseForLog);
 
   reply.type("text/xml").send(twimlResponse);
 });
@@ -113,8 +110,6 @@ fastify.all("/incoming-call", async (request, reply) => {
 // WebSocket route for media-stream
 fastify.register(async (fastify) => {
   fastify.get("/media-stream", { websocket: true }, (connection, req) => {
-    console.log("Client connected");
-
     const openAiWs = new WebSocket(
       "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01",
       {
@@ -128,8 +123,7 @@ fastify.register(async (fastify) => {
     let streamSid = null;
 
     const sendSessionUpdate = () => {
-      const prompt = `${SYSTEM_MESSAGE}\n- 【予約時間】本日の18時\n- 【電話番号】080 1234 5678 \n- 【名前】なかにし なおと\n- 【予約人数】2`;
-
+      const prompt = `${SYSTEM_MESSAGE}\n- 【予約時間】本日の１8時\n- 【電話番号】080 1234 5678 \n- 【名前】この名前はサンプルです\n- 【予約人数】０`;
       const sessionUpdate = {
         type: "session.update",
         session: {
