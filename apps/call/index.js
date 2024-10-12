@@ -128,7 +128,7 @@ fastify.register(async (fastify) => {
     let streamSid = null;
 
     const sendSessionUpdate = () => {
-      const prompt = `${SYSTEM_MESSAGE}\n- 【予約時間】本日の18時\n- 【電話番号】080 1234 5678 \n- 【名前】なかにし なおと`;
+      const prompt = `${SYSTEM_MESSAGE}\n- 【予約時間】本日の18時\n- 【電話番号】080 1234 5678 \n- 【名前】なかにし なおと\n- 【予約人数】2`;
 
       const sessionUpdate = {
         type: "session.update",
