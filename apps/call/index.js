@@ -63,7 +63,7 @@ fastify.get("/", async (request, reply) => {
 });
 
 fastify.post("/call", async (request, reply) => {
-  const { phone, restaurantNumber, name, date, customerCount } = request.body;
+  const { phone, restaurantNumber, name, date, customerCount } = request.query;
 
   if (!phone || !restaurantNumber || !name || !date || !customerCount) {
     return reply.status(400).send({ error: "vars are required" });

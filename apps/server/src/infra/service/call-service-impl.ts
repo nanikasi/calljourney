@@ -25,7 +25,7 @@ export class CallServiceImpl implements CallService {
   }
 
   async call(user: User, reservation: Reservation): Promise<void> {
-    const url = this._apiUrl;
+    const url = `${this._apiUrl}/call`;
 
     const time = reservation.time.tz("Asia/Tokyo");
     const now = dayjs().tz("Asia/Tokyo");
