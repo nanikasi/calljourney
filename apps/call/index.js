@@ -88,6 +88,9 @@ fastify.post("/call", async (request, reply) => {
 // <Say> punctuation to improve text-to-speech translation
 fastify.all("/incoming-call", async (request, reply) => {
   const { number, name, reserve_date } = request.query;
+  console.log(number);
+  console.log(name);
+  console.log(reserve_date);
   const twimlResponse = `<?xml version="1.0" encoding="UTF-8"?>
                           <Response>
                               <Say>O.K.</Say>
@@ -95,6 +98,14 @@ fastify.all("/incoming-call", async (request, reply) => {
                                   <Stream url="wss://${request.headers.host}/media-stream" />
                               </Connect>
                           </Response>`;
+  const twimlResponseForLog = `<?xml version="1.0" encoding="UTF-8"?>
+                          <Response>
+                              <Say>O.K.</Say>
+                              <Connect>
+                                  <Stream url="wss://${request.headers.host}/media-stream?number=${encodeURIComponent(number)}&name=${encodeURIComponent(name)}&reserve_date=${encodeURIComponent(reserve_date)}" />
+                              </Connect>
+                          </Response>`;
+  console.log(twimlResponseForLog);
 
   reply.type("text/xml").send(twimlResponse);
 });
